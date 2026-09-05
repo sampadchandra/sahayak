@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { DM_Serif_Display, Geist } from 'next/font/google'
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+import { LanguageProvider } from '@/components/language-provider'
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-geist' })
 const dmSerif = DM_Serif_Display({ subsets: ['latin'], weight: '400', variable: '--font-dm-serif' })
@@ -23,7 +24,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className="bg-background">
       <body className={`${geist.variable} ${dmSerif.variable} antialiased`}>
-        {children}
+        <LanguageProvider>{children}</LanguageProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
