@@ -19,8 +19,8 @@ const services = [
 ]
 
 const workers = [
-  { name: 'Ravi Kumar', role: 'Home care specialist', rating: '4.9', jobs: '240+ jobs', area: 'Indiranagar, 2.4 km', initials: 'RK', color: 'saffron' },
-  { name: 'Ravi Kumar', role: 'Electrician & repairs', rating: '4.8', jobs: '180+ jobs', area: 'Koramangala, 3.1 km', initials: 'RK', color: 'emerald' },
+  { name: 'Ajay Jha', role: 'Home care specialist', rating: '4.9', jobs: '240+ jobs', area: 'Indiranagar, 2.4 km', initials: 'AJ', color: 'saffron' },
+  { name: 'Ajay Jha', role: 'Electrician & repairs', rating: '4.8', jobs: '180+ jobs', area: 'Koramangala, 3.1 km', initials: 'AJ', color: 'emerald' },
   { name: 'Meena Sharma', role: 'Cook & elder companion', rating: '5.0', jobs: '96+ jobs', area: 'HSR Layout, 4.7 km', initials: 'MS', color: 'clay' },
 ]
 

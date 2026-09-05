@@ -6,7 +6,7 @@ import { authClient } from '@/lib/auth-client'
 import { ArrowRight, Check, Clock3, MessageCircle, Navigation, Phone, Sparkles, Star } from 'lucide-react'
 
 const workers = [
-  { name: 'Ravi Kumar', role: 'Home care specialist', rating: 4.9, distance: 2.4, languages: ['English', 'हिन्दी'], availability: 'Morning', services: ['Elder care', 'Home cleaning'], initials: 'RK' },
+  { name: 'Ajay Jha', role: 'Home care specialist', rating: 4.9, distance: 2.4, languages: ['English', 'हिन्दी'], availability: 'Morning', services: ['Elder care', 'Home cleaning'], initials: 'AJ' },
   { name: 'Meena Sharma', role: 'Cook & elder companion', rating: 5, distance: 4.7, languages: ['বাংলা', 'English'], availability: 'Flexible', services: ['Cooking help', 'Elder care'], initials: 'MS' },
   { name: 'Arjun Das', role: 'Repairs & maintenance', rating: 4.8, distance: 3.1, languages: ['English', 'বাংলা'], availability: 'Afternoon', services: ['Repairs & more', 'Home cleaning'], initials: 'AD' },
 ]
