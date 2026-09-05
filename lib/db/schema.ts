@@ -50,7 +50,11 @@ export const booking = pgTable('booking', {
   id: text('id').primaryKey(),
   userId: text('userId').notNull(),
   service: text('service').notNull(),
-  status: text('status').notNull().default('requested'),
-  createdAt: timestamp('createdAt').notNull().defaultNow(),
+  status: text('status').notNull().default('REQUESTED'),
+  scheduledFor: timestamp('scheduledFor'),
+  location: text('location').notNull(),
+  notes: text('notes'),
   amount: integer('amount'),
+  createdAt: timestamp('createdAt').notNull().defaultNow(),
+  updatedAt: timestamp('updatedAt').notNull().defaultNow(),
 })

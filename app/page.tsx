@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { BookingForm } from '@/components/booking-form'
 import { useState } from 'react'
 import {
   ArrowRight, BadgeCheck, Bell, CalendarDays, Check, ChevronDown, CircleHelp,
@@ -16,7 +17,7 @@ const services = [
 ]
 
 const workers = [
-  { name: 'Sunita Devi', role: 'Home care specialist', rating: '4.9', jobs: '240+ jobs', area: 'Indiranagar, 2.4 km', initials: 'SD', color: 'saffron' },
+  { name: 'Ravi Kumar', role: 'Home care specialist', rating: '4.9', jobs: '240+ jobs', area: 'Indiranagar, 2.4 km', initials: 'RK', color: 'saffron' },
   { name: 'Ravi Kumar', role: 'Electrician & repairs', rating: '4.8', jobs: '180+ jobs', area: 'Koramangala, 3.1 km', initials: 'RK', color: 'emerald' },
   { name: 'Meena Sharma', role: 'Cook & elder companion', rating: '5.0', jobs: '96+ jobs', area: 'HSR Layout, 4.7 km', initials: 'MS', color: 'clay' },
 ]
@@ -43,7 +44,7 @@ export default function Page() {
       <header className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-5 lg:px-8">
           <a href="#top" className="flex items-center gap-3" aria-label="SAHAYAK home">
-            <Image src="/sahayak-logo.png" alt="SAHAYAK" width={170} height={52} className="h-12 w-auto object-contain object-left" />
+            <span className="rounded-[1.25rem] border border-primary/10 bg-card/80 px-2 py-1 shadow-sm"><Image src="/sahayak-logo.png" alt="SAHAYAK" width={170} height={52} className="h-10 w-auto rounded-xl object-contain object-left" /></span>
           </a>
           <nav className="hidden items-center gap-8 text-sm font-medium lg:flex">
             {navItems.map((item) => <a key={item} href={`#${item.toLowerCase().replaceAll(' ', '-')}`} className="text-muted-foreground transition-colors hover:text-foreground">{item}</a>)}
@@ -97,7 +98,7 @@ export default function Page() {
 
       <div className="fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-1 rounded-full border border-border bg-card/95 p-1.5 shadow-xl backdrop-blur lg:hidden"><BottomAction icon={Home} label="Home" active /><BottomAction icon={CalendarDays} label="Bookings" onClick={() => showNotice('No active bookings yet')} /><BottomAction icon={Bell} label="Alerts" onClick={() => showNotice('You are all caught up')} /><BottomAction icon={Users} label={role} onClick={() => setRole(role === 'Customer' ? 'Worker' : 'Customer')} /></div>
 
-      {booking && <div className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/35 p-4 sm:items-center"><div className="w-full max-w-md rounded-[2rem] bg-card p-6 shadow-2xl"><div className="flex items-start justify-between"><div><p className="eyebrow">Quick booking</p><h2 className="mt-1 font-serif text-3xl font-bold">{booking}</h2></div><button onClick={() => setBooking(null)} className="grid size-9 place-items-center rounded-full bg-muted" aria-label="Close booking"><X className="size-4" /></button></div><div className="mt-6 flex flex-col gap-3"><div className="flex items-center gap-3 rounded-xl border border-border p-3"><MapPin className="size-4 text-primary" /><div><p className="text-sm font-semibold">{location}</p><p className="text-xs text-muted-foreground">Service location</p></div></div><div className="flex items-center gap-3 rounded-xl border border-border p-3"><Clock3 className="size-4 text-primary" /><div><p className="text-sm font-semibold">Today, 5:00 PM</p><p className="text-xs text-muted-foreground">Preferred time</p></div></div></div><div className="mt-6 flex items-center justify-between border-t border-border pt-5"><div><p className="text-xs text-muted-foreground">Estimated starting price</p><p className="font-serif text-2xl font-bold">₹399</p></div><button onClick={() => { setBooking(null); showNotice('Request sent — matching you with a trusted worker') }} className="rounded-full bg-primary px-5 py-3 font-semibold text-primary-foreground">Request help</button></div></div></div>}
+      {booking && <div className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/35 p-4 sm:items-center"><div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-[2rem] bg-card p-6 shadow-2xl"><div className="flex items-start justify-between"><div><p className="eyebrow">Quick booking</p><h2 className="mt-1 font-serif text-3xl font-bold">{booking}</h2></div><button onClick={() => setBooking(null)} className="grid size-9 place-items-center rounded-full bg-muted" aria-label="Close booking"><X className="size-4" /></button></div><BookingForm service={booking} location={location} onClose={() => setBooking(null)} onSuccess={showNotice} /></div></div>}
       {notice && <div role="status" className="fixed right-4 top-24 z-50 flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3 text-sm font-semibold shadow-xl"><Check className="size-4 text-primary" />{notice}</div>}
     </main>
   )

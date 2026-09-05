@@ -43,7 +43,7 @@ export function AuthForm({ mode }: AuthFormProps) {
     <main className="min-h-screen bg-background px-5 py-8 text-foreground sm:grid sm:place-items-center">
       <div className="w-full max-w-md">
         <Link href="/" className="mb-10 flex items-center gap-3">
-          <Image src="/sahayak-logo.png" alt="SAHAYAK" width={170} height={52} className="h-12 w-auto object-contain object-left" priority />
+          <span className="inline-flex rounded-[1.25rem] border border-primary/10 bg-card/80 px-2 py-1 shadow-sm"><Image src="/sahayak-logo.png" alt="SAHAYAK" width={170} height={52} className="h-10 w-auto rounded-xl object-contain object-left" priority /></span>
         </Link>
         <div className="rounded-[2rem] border border-border bg-card p-6 shadow-xl sm:p-8">
           <p className="eyebrow">Your trusted circle</p>
