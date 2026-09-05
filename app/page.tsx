@@ -1,47 +1,112 @@
+'use client'
+
+import { useState } from 'react'
+import {
+  ArrowRight, BadgeCheck, Bell, CalendarDays, Check, ChevronDown, CircleHelp,
+  Clock3, CreditCard, HeartHandshake, Home, Languages, MapPin, Menu, MessageCircle,
+  Navigation, Phone, Play, ShieldCheck, Sparkles, Star, Users, Wallet, X, Zap,
+} from 'lucide-react'
+
+const services = [
+  { name: 'Home cleaning', detail: 'Verified professionals', icon: Home, price: 'From ₹299', tint: 'accent' },
+  { name: 'Cooking help', detail: 'Daily or weekly support', icon: Sparkles, price: 'From ₹399', tint: 'secondary' },
+  { name: 'Elder care', detail: 'Compassionate companions', icon: HeartHandshake, price: 'From ₹499', tint: 'soft' },
+  { name: 'Repairs & more', detail: 'Skilled local workers', icon: Zap, price: 'Get a quote', tint: 'primary' },
+]
+
+const workers = [
+  { name: 'Sunita Devi', role: 'Home care specialist', rating: '4.9', jobs: '240+ jobs', area: 'Indiranagar, 2.4 km', initials: 'SD', color: 'saffron' },
+  { name: 'Ravi Kumar', role: 'Electrician & repairs', rating: '4.8', jobs: '180+ jobs', area: 'Koramangala, 3.1 km', initials: 'RK', color: 'emerald' },
+  { name: 'Meena Sharma', role: 'Cook & elder companion', rating: '5.0', jobs: '96+ jobs', area: 'HSR Layout, 4.7 km', initials: 'MS', color: 'clay' },
+]
+
+const navItems = ['Find help', 'How it works', 'For workers', 'Our impact']
+
+type Role = 'Customer' | 'Worker' | 'Cooperative' | 'Federation'
+
 export default function Page() {
+  const [location, setLocation] = useState('Bengaluru')
+  const [language, setLanguage] = useState('English')
+  const [role, setRole] = useState<Role>('Customer')
+  const [booking, setBooking] = useState<string | null>(null)
+  const [notice, setNotice] = useState('')
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  function showNotice(message: string) {
+    setNotice(message)
+    window.setTimeout(() => setNotice(''), 2800)
+  }
+
   return (
-    <main
-      style={{
-        colorScheme: 'light dark',
-        position: 'relative',
-        display: 'flex',
-        minHeight: '100vh',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'light-dark(#fff, #000)',
-        color: 'light-dark(#000, #fff)',
-      }}
-    >
-      <svg
-        aria-hidden="true"
-        style={{ width: 80, height: 80 }}
-        width={80}
-        height={80}
-        fill="none"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-        stroke="currentColor"
-        strokeWidth="0.5"
-      >
-        <path
-          d="M14.2 14.2H17V6.9375C17 4.76288 15.2371 3 13.0625 3H5.8V5.8M14.2 14.2V7.79063L7.79062 14.2H14.2ZM14.2 14.2V17H6.9375C4.76288 17 3 15.2371 3 13.0625V5.8H5.8M5.8 5.8V12.2313L12.2313 5.8H5.8Z"
-          strokeLinejoin="round"
-        />
-      </svg>
-      <p
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: 'calc(50% + 56px)',
-          transform: 'translateX(-50%)',
-          whiteSpace: 'nowrap',
-          fontSize: '14px',
-          fontWeight: 500,
-          color: 'light-dark(#71717a, #a1a1aa)',
-        }}
-      >
-        Your v0 generation will show here.
-      </p>
+    <main className="min-h-screen bg-background text-foreground">
+      <header className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur-xl">
+        <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-5 lg:px-8">
+          <a href="#top" className="flex items-center gap-3" aria-label="SAHAYAK home">
+            <span className="grid size-10 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-sm"><HeartHandshake className="size-5" /></span>
+            <span><span className="block font-serif text-xl font-bold tracking-tight">SAHAYAK</span><span className="hidden text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground sm:block">Trusted help, fair work</span></span>
+          </a>
+          <nav className="hidden items-center gap-8 text-sm font-medium lg:flex">
+            {navItems.map((item) => <a key={item} href={`#${item.toLowerCase().replaceAll(' ', '-')}`} className="text-muted-foreground transition-colors hover:text-foreground">{item}</a>)}
+          </nav>
+          <div className="flex items-center gap-2">
+            <button onClick={() => showNotice('Language preferences saved')} className="hidden items-center gap-1 rounded-full px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted sm:flex"><Languages className="size-4" /> {language}<ChevronDown className="size-3" /></button>
+            <button onClick={() => showNotice('Sign in is ready for your account')} className="hidden rounded-full px-4 py-2 text-sm font-semibold sm:block">Sign in</button>
+            <button onClick={() => setMenuOpen(!menuOpen)} className="grid size-10 place-items-center rounded-full border border-border lg:hidden" aria-label="Open menu"><Menu className="size-5" /></button>
+            <button onClick={() => showNotice('Welcome to SAHAYAK')} className="hidden rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-transform hover:-translate-y-0.5 sm:block">Get started</button>
+          </div>
+        </div>
+        {menuOpen && <div className="border-t border-border bg-card px-5 py-4 lg:hidden"><div className="flex flex-col gap-4 text-sm font-medium">{navItems.map((item) => <a key={item} href={`#${item.toLowerCase().replaceAll(' ', '-')}`} onClick={() => setMenuOpen(false)}>{item}</a>)}<button className="w-fit rounded-full bg-primary px-4 py-2 text-primary-foreground">Get started</button></div></div>}
+      </header>
+
+      <section id="top" className="overflow-hidden border-b border-border/60">
+        <div className="mx-auto grid max-w-7xl gap-12 px-5 pb-18 pt-14 lg:grid-cols-[1.08fr_.92fr] lg:items-center lg:px-8 lg:pb-24 lg:pt-20">
+          <div className="relative">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/20 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-accent-foreground"><span className="size-1.5 rounded-full bg-accent-foreground" /> Built for everyday India</div>
+            <h1 className="max-w-2xl font-serif text-5xl font-bold leading-[1.05] tracking-tight text-balance sm:text-6xl lg:text-7xl">Trusted help.<br /><span className="text-primary">Fair work.</span><br />Better lives.</h1>
+            <p className="mt-7 max-w-xl text-lg leading-8 text-muted-foreground">SAHAYAK connects households with verified local service workers — making everyday support easier to find, safer to trust, and fairer for everyone.</p>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row"><button onClick={() => document.getElementById('find-help')?.scrollIntoView({ behavior: 'smooth' })} className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 font-semibold text-primary-foreground shadow-lg shadow-primary/15 transition-transform hover:-translate-y-0.5">Find trusted help <ArrowRight className="size-4" /></button><button onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })} className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-card px-6 py-3.5 font-semibold transition-colors hover:bg-muted"><Play className="size-4 fill-current" /> See how it works</button></div>
+            <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground"><span className="flex items-center gap-2"><BadgeCheck className="size-4 text-primary" /> Verified workers</span><span className="flex items-center gap-2"><ShieldCheck className="size-4 text-primary" /> Safety first</span><span className="flex items-center gap-2"><Wallet className="size-4 text-primary" /> Fair earnings</span></div>
+          </div>
+          <div id="find-help" className="relative rounded-[2rem] bg-primary p-3 shadow-2xl shadow-primary/20 lg:ml-auto lg:max-w-lg">
+            <div className="rounded-[1.5rem] bg-card p-5 sm:p-7"><div className="mb-7 flex items-start justify-between"><div><p className="text-sm font-semibold text-primary">Start here</p><h2 className="mt-1 font-serif text-3xl font-bold">What do you need help with?</h2></div><span className="grid size-11 place-items-center rounded-2xl bg-accent/20 text-accent-foreground"><Sparkles className="size-5" /></span></div>
+              <div className="grid grid-cols-2 gap-3">{services.map((service) => { const Icon = service.icon; return <button key={service.name} onClick={() => setBooking(service.name)} className="group rounded-2xl border border-border bg-background p-4 text-left transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-md"><span className={`mb-5 grid size-10 place-items-center rounded-xl ${service.tint === 'accent' ? 'bg-accent/25 text-accent-foreground' : service.tint === 'secondary' ? 'bg-secondary text-secondary-foreground' : service.tint === 'soft' ? 'bg-muted text-primary' : 'bg-primary text-primary-foreground'}`}><Icon className="size-5" /></span><span className="block text-sm font-bold">{service.name}</span><span className="mt-1 block text-xs leading-5 text-muted-foreground">{service.detail}</span><span className="mt-4 block text-xs font-semibold text-primary">{service.price}</span></button> })}</div>
+              <div className="mt-5 flex items-center gap-3 rounded-2xl border border-border bg-background px-4 py-3"><MapPin className="size-4 text-primary" /><select aria-label="Choose location" value={location} onChange={(event) => setLocation(event.target.value)} className="w-full bg-transparent text-sm font-medium outline-none"><option>Bengaluru</option><option>Mumbai</option><option>Delhi NCR</option><option>Hyderabad</option></select><span className="text-xs text-muted-foreground">Change</span></div>
+              <p className="mt-4 text-center text-xs text-muted-foreground">No hidden fees. You choose who comes to your home.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-border/60 bg-card"><div className="mx-auto grid max-w-7xl gap-5 px-5 py-7 sm:grid-cols-3 lg:px-8"><TrustStat value="18,400+" label="workers earning with dignity" /><TrustStat value="62,000+" label="homes supported" /><TrustStat value="4.8 / 5" label="average experience rating" /></div></section>
+
+      <section id="how-it-works" className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28"><div className="grid gap-14 lg:grid-cols-[.75fr_1.25fr] lg:items-start"><div><p className="eyebrow">Simple by design</p><h2 className="section-title">Support that starts with trust.</h2><p className="mt-5 max-w-md leading-7 text-muted-foreground">We bring the care of a local recommendation together with the convenience of a modern service — while keeping workers at the heart of the system.</p><button onClick={() => showNotice('Our full story is coming soon')} className="mt-7 inline-flex items-center gap-2 font-semibold text-primary">Read our story <ArrowRight className="size-4" /></button></div><div className="grid gap-4 sm:grid-cols-3"><Step number="01" title="Tell us what you need" text="Choose a service, share your location, and set your preferred time." icon={MessageCircle} /><Step number="02" title="Meet your match" text="See verified profiles, transparent prices, and real reviews." icon={Users} /><Step number="03" title="Feel looked after" text="Book safely, pay fairly, and get support whenever you need it." icon={HeartHandshake} /></div></div></section>
+
+      <section id="find-help-more" className="bg-secondary/60 py-20 lg:py-28"><div className="mx-auto max-w-7xl px-5 lg:px-8"><div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end"><div><p className="eyebrow">People, not profiles</p><h2 className="section-title">Meet your neighbours.</h2><p className="mt-4 text-muted-foreground">Every SAHAYAK worker is verified, trained, and building a livelihood they can count on.</p></div><button onClick={() => showNotice('Showing more verified workers near you')} className="inline-flex items-center gap-2 font-semibold text-primary">Explore all workers <ArrowRight className="size-4" /></button></div><div className="mt-10 grid gap-5 md:grid-cols-3">{workers.map((worker) => <WorkerCard key={worker.name} worker={worker} onBook={() => setBooking(worker.name)} />)}</div></div></section>
+
+      <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28"><div className="grid gap-8 lg:grid-cols-2"><div className="rounded-[2rem] bg-primary p-7 text-primary-foreground sm:p-10"><div className="flex items-start justify-between"><div><p className="text-sm font-semibold text-accent">Smart matching</p><h2 className="mt-2 max-w-md font-serif text-4xl font-bold leading-tight">The right person makes all the difference.</h2></div><Sparkles className="size-7 text-accent" /></div><p className="mt-5 max-w-md leading-7 text-primary-foreground/75">Tell us what matters to you — language, timing, experience, or simply a good feeling. Our matching assistant helps you choose with confidence.</p><div className="mt-8 rounded-2xl bg-primary-foreground/10 p-4"><div className="flex items-center justify-between text-sm"><span>Match preferences</span><span className="rounded-full bg-accent px-2 py-1 text-xs font-bold text-accent-foreground">Demo AI</span></div><div className="mt-4 flex flex-wrap gap-2">{['Kannada speaker', 'Mornings', 'Elder care'].map((tag) => <button key={tag} onClick={() => showNotice(`${tag} preference added`)} className="rounded-full border border-primary-foreground/20 px-3 py-2 text-xs hover:bg-primary-foreground/10">{tag}</button>)}</div></div><button onClick={() => showNotice('Three great matches found near you')} className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-bold text-accent-foreground">Find my match <ArrowRight className="size-4" /></button></div><div className="rounded-[2rem] border border-border bg-card p-7 sm:p-10"><div className="flex items-center gap-3"><span className="grid size-11 place-items-center rounded-2xl bg-accent/25 text-accent-foreground"><Navigation className="size-5" /></span><div><p className="text-sm font-semibold">Your trusted circle</p><p className="text-xs text-muted-foreground">A simple view of every booking</p></div></div><div className="mt-8 flex flex-col gap-5">{['Request received', 'Sunita accepted your booking', 'On the way to your home'].map((item, index) => <div key={item} className="flex items-center gap-4"><span className={`grid size-8 shrink-0 place-items-center rounded-full ${index < 2 ? 'bg-primary text-primary-foreground' : 'border-2 border-primary text-primary'}`}>{index < 2 ? <Check className="size-4" /> : <span className="size-2 rounded-full bg-primary" />}</span><div className="flex-1"><p className="text-sm font-semibold">{item}</p><p className="text-xs text-muted-foreground">{index === 0 ? 'Today, 9:41 AM' : index === 1 ? 'Today, 9:43 AM' : 'Arriving in 12 minutes'}</p></div>{index === 2 && <span className="size-2 animate-pulse rounded-full bg-accent-foreground" />}</div>)}<div className="mt-2 flex items-center gap-3 rounded-2xl bg-muted p-4"><div className="grid size-10 place-items-center rounded-full bg-accent font-bold text-accent-foreground">SD</div><div className="flex-1"><p className="text-sm font-bold">Sunita Devi</p><p className="text-xs text-muted-foreground">Home care specialist</p></div><button onClick={() => showNotice('Calling Sunita...')} className="grid size-9 place-items-center rounded-full bg-card"><Phone className="size-4 text-primary" /></button><button onClick={() => showNotice('Opening secure chat...')} className="grid size-9 place-items-center rounded-full bg-card"><MessageCircle className="size-4 text-primary" /></button></div></div></div></div></section>
+
+      <section className="border-y border-border/60 bg-accent/20"><div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 lg:grid-cols-[1fr_1.2fr] lg:items-center lg:px-8 lg:py-20"><div><p className="eyebrow">For every kind of help</p><h2 className="section-title">A fairer way to care for our homes.</h2><p className="mt-5 max-w-lg leading-7 text-muted-foreground">From first request to final payment, SAHAYAK is designed around dignity, choice, and the belief that reliable work deserves reliable support.</p></div><div className="grid gap-4 sm:grid-cols-2"><Feature icon={ShieldCheck} title="Safety built in" text="Identity checks, SOS support, and a team that has your back." /><Feature icon={CreditCard} title="Clear, fair pay" text="Transparent pricing for customers. More of every rupee for workers." /><Feature icon={CalendarDays} title="Your time matters" text="Flexible bookings that fit real lives, not rigid schedules." /><Feature icon={CircleHelp} title="Human support" text="Talk to a real person when something does not feel right." /></div></div></section>
+
+      <section id="for-workers" className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28"><div className="rounded-[2rem] border border-border bg-card p-7 sm:p-10 lg:p-14"><div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-center"><div><p className="eyebrow">For workers and cooperatives</p><h2 className="section-title">Your skill is your strength.</h2><p className="mt-5 max-w-lg leading-7 text-muted-foreground">Earn more predictably, build your reputation, and access benefits that respect the work you do every day. SAHAYAK grows with you — not above you.</p><div className="mt-8 flex flex-wrap gap-3"><button onClick={() => setRole('Worker')} className="rounded-full bg-primary px-5 py-3 font-semibold text-primary-foreground">Join as a worker</button><button onClick={() => setRole('Cooperative')} className="rounded-full border border-border px-5 py-3 font-semibold hover:bg-muted">For cooperatives</button></div></div><div className="grid gap-4 sm:grid-cols-2"><div className="rounded-2xl bg-primary p-6 text-primary-foreground"><Wallet className="size-6 text-accent" /><p className="mt-8 font-serif text-4xl font-bold">₹18,650</p><p className="mt-1 text-sm text-primary-foreground/70">average monthly earnings</p><div className="mt-5 h-2 overflow-hidden rounded-full bg-primary-foreground/15"><div className="h-full w-4/5 rounded-full bg-accent" /></div></div><div className="flex flex-col justify-between rounded-2xl bg-muted p-6"><div className="flex items-center justify-between"><HeartHandshake className="size-6 text-primary" /><span className="rounded-full bg-accent/25 px-2 py-1 text-xs font-bold text-accent-foreground">Active</span></div><div><p className="font-serif text-3xl font-bold">12,400</p><p className="mt-1 text-sm text-muted-foreground">workers with welfare access</p></div></div></div></div></div></section>
+
+      <section id="our-impact" className="bg-primary text-primary-foreground"><div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24"><div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end"><div><p className="text-sm font-bold uppercase tracking-[0.16em] text-accent">Our impact</p><h2 className="mt-4 max-w-xl font-serif text-4xl font-bold leading-tight sm:text-5xl">Small acts of help add up to a stronger community.</h2></div><button onClick={() => showNotice('Impact report downloaded')} className="inline-flex w-fit items-center gap-2 rounded-full bg-primary-foreground px-5 py-3 font-semibold text-primary">Read the impact report <ArrowRight className="size-4" /></button></div><div className="mt-14 grid gap-8 border-t border-primary-foreground/20 pt-10 sm:grid-cols-3"><Impact value="2.4M" label="hours of work created" /><Impact value="₹68Cr" label="paid directly to workers" /><Impact value="94%" label="say they feel more secure" /></div></div></section>
+
+      <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20"><div className="flex flex-col items-center justify-between gap-6 rounded-[2rem] bg-secondary p-8 text-center sm:p-12 lg:flex-row lg:text-left"><div><p className="font-serif text-3xl font-bold">Need a little help today?</p><p className="mt-2 text-muted-foreground">Start with one simple request. We will take it from there.</p></div><button onClick={() => document.getElementById('find-help')?.scrollIntoView({ behavior: 'smooth' })} className="inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-6 py-3.5 font-semibold text-primary-foreground">Find trusted help <ArrowRight className="size-4" /></button></div></section>
+
+      <footer className="border-t border-border/70"><div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between lg:px-8"><div><span className="font-serif font-bold text-foreground">SAHAYAK</span><span className="ml-3">Trusted help, fair work.</span></div><div className="flex items-center gap-5"><button onClick={() => showNotice('Safety centre opened')} className="hover:text-foreground">Safety centre</button><button onClick={() => showNotice('Help centre opened')} className="hover:text-foreground">Help centre</button><span>Made for everyday India</span></div></div></footer>
+
+      <div className="fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-1 rounded-full border border-border bg-card/95 p-1.5 shadow-xl backdrop-blur lg:hidden"><BottomAction icon={Home} label="Home" active /><BottomAction icon={CalendarDays} label="Bookings" onClick={() => showNotice('No active bookings yet')} /><BottomAction icon={Bell} label="Alerts" onClick={() => showNotice('You are all caught up')} /><BottomAction icon={Users} label={role} onClick={() => setRole(role === 'Customer' ? 'Worker' : 'Customer')} /></div>
+
+      {booking && <div className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/35 p-4 sm:items-center"><div className="w-full max-w-md rounded-[2rem] bg-card p-6 shadow-2xl"><div className="flex items-start justify-between"><div><p className="eyebrow">Quick booking</p><h2 className="mt-1 font-serif text-3xl font-bold">{booking}</h2></div><button onClick={() => setBooking(null)} className="grid size-9 place-items-center rounded-full bg-muted" aria-label="Close booking"><X className="size-4" /></button></div><div className="mt-6 flex flex-col gap-3"><div className="flex items-center gap-3 rounded-xl border border-border p-3"><MapPin className="size-4 text-primary" /><div><p className="text-sm font-semibold">{location}</p><p className="text-xs text-muted-foreground">Service location</p></div></div><div className="flex items-center gap-3 rounded-xl border border-border p-3"><Clock3 className="size-4 text-primary" /><div><p className="text-sm font-semibold">Today, 5:00 PM</p><p className="text-xs text-muted-foreground">Preferred time</p></div></div></div><div className="mt-6 flex items-center justify-between border-t border-border pt-5"><div><p className="text-xs text-muted-foreground">Estimated starting price</p><p className="font-serif text-2xl font-bold">₹399</p></div><button onClick={() => { setBooking(null); showNotice('Request sent — matching you with a trusted worker') }} className="rounded-full bg-primary px-5 py-3 font-semibold text-primary-foreground">Request help</button></div></div></div>}
+      {notice && <div role="status" className="fixed right-4 top-24 z-50 flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3 text-sm font-semibold shadow-xl"><Check className="size-4 text-primary" />{notice}</div>}
     </main>
   )
 }
+
+function TrustStat({ value, label }: { value: string; label: string }) { return <div className="flex items-center gap-4 sm:justify-center"><p className="font-serif text-2xl font-bold text-primary">{value}</p><p className="max-w-[150px] text-sm leading-5 text-muted-foreground">{label}</p></div> }
+function Step({ number, title, text, icon: Icon }: { number: string; title: string; text: string; icon: typeof MessageCircle }) { return <div className="rounded-2xl border border-border bg-card p-5"><span className="flex items-center justify-between text-xs font-bold text-primary"><span>{number}</span><Icon className="size-5" /></span><h3 className="mt-10 font-serif text-xl font-bold">{title}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{text}</p></div> }
+function WorkerCard({ worker, onBook }: { worker: (typeof workers)[number]; onBook: () => void }) { return <article className="rounded-2xl border border-border bg-card p-5 transition-shadow hover:shadow-lg"><div className="flex items-start justify-between"><div className={`grid size-14 place-items-center rounded-2xl text-lg font-bold ${worker.color === 'saffron' ? 'bg-accent/30 text-accent-foreground' : worker.color === 'emerald' ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground'}`}>{worker.initials}</div><button className="text-muted-foreground" aria-label={`Save ${worker.name}`}><HeartHandshake className="size-5" /></button></div><h3 className="mt-5 font-serif text-xl font-bold">{worker.name}</h3><p className="mt-1 text-sm text-muted-foreground">{worker.role}</p><div className="mt-4 flex items-center gap-3 text-xs"><span className="flex items-center gap-1 font-bold"><Star className="size-3.5 fill-accent text-accent-foreground" /> {worker.rating}</span><span className="text-muted-foreground">{worker.jobs}</span><span className="text-muted-foreground">{worker.area}</span></div><button onClick={onBook} className="mt-5 w-full rounded-full border border-primary/30 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground">View profile</button></article> }
+function Feature({ icon: Icon, title, text }: { icon: typeof ShieldCheck; title: string; text: string }) { return <div className="flex gap-4 rounded-2xl bg-card p-5"><span className="grid size-10 shrink-0 place-items-center rounded-xl bg-accent/25 text-accent-foreground"><Icon className="size-5" /></span><div><h3 className="font-semibold">{title}</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">{text}</p></div></div> }
+function Impact({ value, label }: { value: string; label: string }) { return <div><p className="font-serif text-4xl font-bold text-accent sm:text-5xl">{value}</p><p className="mt-2 text-sm text-primary-foreground/70">{label}</p></div> }
+function BottomAction({ icon: Icon, label, active, onClick }: { icon: typeof Home; label: string; active?: boolean; onClick?: () => void }) { return <button onClick={onClick} className={`flex min-w-16 flex-col items-center gap-1 rounded-full px-3 py-2 text-[10px] font-semibold ${active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`}><Icon className="size-4" />{label}</button> }
+
