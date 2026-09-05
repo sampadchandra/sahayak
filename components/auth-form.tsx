@@ -1,9 +1,10 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { FormEvent, useState } from 'react'
-import { ArrowRight, HeartHandshake, LoaderCircle } from 'lucide-react'
+import { ArrowRight, LoaderCircle } from 'lucide-react'
 import { authClient } from '@/lib/auth-client'
 
 type AuthFormProps = { mode: 'sign-in' | 'sign-up' }
@@ -21,24 +22,28 @@ export function AuthForm({ mode }: AuthFormProps) {
     event.preventDefault()
     setError('')
     setPending(true)
-    const result = isSignUp
-      ? await authClient.signUp.email({ name, email, password })
-      : await authClient.signIn.email({ email, password })
-    setPending(false)
-    if (result.error) {
-      setError('We could not complete that request. Please check your details and try again.')
-      return
+    try {
+      const result = isSignUp
+        ? await authClient.signUp.email({ name: name.trim(), email: email.trim().toLowerCase(), password })
+        : await authClient.signIn.email({ email: email.trim().toLowerCase(), password })
+      if (result.error) {
+        setError(isSignUp ? 'This email may already be registered, or the details are not valid.' : 'Email or password is incorrect. Please try again.')
+        return
+      }
+      router.push('/')
+      router.refresh()
+    } catch {
+      setError('We could not connect to SAHAYAK right now. Please try again.')
+    } finally {
+      setPending(false)
     }
-    router.push('/')
-    router.refresh()
   }
 
   return (
     <main className="min-h-screen bg-background px-5 py-8 text-foreground sm:grid sm:place-items-center">
       <div className="w-full max-w-md">
         <Link href="/" className="mb-10 flex items-center gap-3">
-          <span className="grid size-10 place-items-center rounded-2xl bg-primary text-primary-foreground"><HeartHandshake className="size-5" /></span>
-          <span><span className="block font-serif text-xl font-bold">SAHAYAK</span><span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Trusted help, fair work</span></span>
+          <Image src="/sahayak-logo.png" alt="SAHAYAK" width={170} height={52} className="h-12 w-auto object-contain object-left" priority />
         </Link>
         <div className="rounded-[2rem] border border-border bg-card p-6 shadow-xl sm:p-8">
           <p className="eyebrow">Your trusted circle</p>

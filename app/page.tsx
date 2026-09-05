@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useState } from 'react'
 import {
   ArrowRight, BadgeCheck, Bell, CalendarDays, Check, ChevronDown, CircleHelp,
@@ -42,8 +43,7 @@ export default function Page() {
       <header className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-5 lg:px-8">
           <a href="#top" className="flex items-center gap-3" aria-label="SAHAYAK home">
-            <span className="grid size-10 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-sm"><HeartHandshake className="size-5" /></span>
-            <span><span className="block font-serif text-xl font-bold tracking-tight">SAHAYAK</span><span className="hidden text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground sm:block">Trusted help, fair work</span></span>
+            <Image src="/sahayak-logo.png" alt="SAHAYAK" width={170} height={52} className="h-12 w-auto object-contain object-left" />
           </a>
           <nav className="hidden items-center gap-8 text-sm font-medium lg:flex">
             {navItems.map((item) => <a key={item} href={`#${item.toLowerCase().replaceAll(' ', '-')}`} className="text-muted-foreground transition-colors hover:text-foreground">{item}</a>)}
