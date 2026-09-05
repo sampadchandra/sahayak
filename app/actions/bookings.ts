@@ -1,0 +1,45 @@
+'use server'
+
+import { randomUUID } from 'node:crypto'
+import { revalidatePath } from 'next/cache'
+import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
+import { eq, desc } from 'drizzle-orm'
+import { auth } from '@/lib/auth'
+import { db } from '@/lib/db'
+import { booking } from '@/lib/db/schema'
+
+async function requireUser() {
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session?.user) redirect('/sign-in')
+  return session.user
+}
+
+export async function createBooking(formData: FormData) {
+  const user = await requireUser()
+  const service = String(formData.get('service') ?? '').trim()
+  const location = String(formData.get('location') ?? '').trim()
+  const notes = String(formData.get('notes') ?? '').trim()
+  const scheduledForValue = String(formData.get('scheduledFor') ?? '').trim()
+
+  if (!service || !location) throw new Error('Service and location are required')
+
+  await db.insert(booking).values({
+    id: randomUUID(),
+    userId: user.id,
+    service,
+    location,
+    notes: notes || null,
+    scheduledFor: scheduledForValue ? new Date(scheduledForValue) : null,
+    amount: null,
+    status: 'REQUESTED',
+  })
+
+  revalidatePath('/account')
+  revalidatePath('/dashboard')
+}
+
+export async function getMyBookings() {
+  const user = await requireUser()
+  return db.select().from(booking).where(eq(booking.userId, user.id)).orderBy(desc(booking.createdAt))
+}
