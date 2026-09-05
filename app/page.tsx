@@ -50,12 +50,12 @@ export default function Page() {
           </nav>
           <div className="flex items-center gap-2">
             <button onClick={() => showNotice('Language preferences saved')} className="hidden items-center gap-1 rounded-full px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted sm:flex"><Languages className="size-4" /> {language}<ChevronDown className="size-3" /></button>
-            <button onClick={() => showNotice('Sign in is ready for your account')} className="hidden rounded-full px-4 py-2 text-sm font-semibold sm:block">Sign in</button>
+            <a href="/sign-in" className="hidden rounded-full px-4 py-2 text-sm font-semibold sm:block">Sign in</a>
             <button onClick={() => setMenuOpen(!menuOpen)} className="grid size-10 place-items-center rounded-full border border-border lg:hidden" aria-label="Open menu"><Menu className="size-5" /></button>
-            <button onClick={() => showNotice('Welcome to SAHAYAK')} className="hidden rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-transform hover:-translate-y-0.5 sm:block">Get started</button>
+            <a href="/sign-up" className="hidden rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-transform hover:-translate-y-0.5 sm:block">Get started</a>
           </div>
         </div>
-        {menuOpen && <div className="border-t border-border bg-card px-5 py-4 lg:hidden"><div className="flex flex-col gap-4 text-sm font-medium">{navItems.map((item) => <a key={item} href={`#${item.toLowerCase().replaceAll(' ', '-')}`} onClick={() => setMenuOpen(false)}>{item}</a>)}<button className="w-fit rounded-full bg-primary px-4 py-2 text-primary-foreground">Get started</button></div></div>}
+        {menuOpen && <div className="border-t border-border bg-card px-5 py-4 lg:hidden"><div className="flex flex-col gap-4 text-sm font-medium">{navItems.map((item) => <a key={item} href={`#${item.toLowerCase().replaceAll(' ', '-')}`} onClick={() => setMenuOpen(false)}>{item}</a>)}<a href="/sign-up" className="w-fit rounded-full bg-primary px-4 py-2 text-primary-foreground">Get started</a></div></div>}
       </header>
 
       <section id="top" className="overflow-hidden border-b border-border/60">
