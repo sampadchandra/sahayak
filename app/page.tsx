@@ -2,7 +2,6 @@
 
 import Image from 'next/image'
 import { BookingForm } from '@/components/booking-form'
-import { LanguageSwitcher } from '@/components/language-switcher'
 import { authClient } from '@/lib/auth-client'
 import { useLanguage } from '@/components/language-provider'
 import { useState } from 'react'
@@ -55,7 +54,6 @@ export default function Page() {
             {navItems.map((item) => <a key={item} href={`#${item.toLowerCase().replaceAll(' ', '-')}`} className="text-muted-foreground transition-colors hover:text-foreground">{t(item as 'Find help' | 'How it works' | 'For workers' | 'Our impact')}</a>)}
           </nav>
           <div className="flex items-center gap-2">
-            <LanguageSwitcher />
             {session?.user ? <a href="/account" className="hidden rounded-full border border-border px-4 py-2 text-sm font-semibold sm:block">{session.user.name}</a> : <a href="/sign-in" className="hidden rounded-full px-4 py-2 text-sm font-semibold sm:block">Sign in</a>}
             <button onClick={() => setMenuOpen(!menuOpen)} className="grid size-10 place-items-center rounded-full border border-border lg:hidden" aria-label="Open menu"><Menu className="size-5" /></button>
             <a href="/sign-up" className="hidden rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-transform hover:-translate-y-0.5 sm:block">Get started</a>
