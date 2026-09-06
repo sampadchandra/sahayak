@@ -14,6 +14,7 @@ export async function saveWorkerProfile(formData: FormData) {
   const required = ['fullName', 'phone', 'email', 'primarySkill', 'experience', 'serviceArea', 'languages', 'availability']
   const values = Object.fromEntries(required.map((key) => [key, String(formData.get(key) ?? '').trim()]))
   if (required.some((key) => !values[key])) throw new Error('Please complete all required fields.')
+  if (values.fullName.length > 120 || values.phone.length > 40 || values.email.length > 320 || values.primarySkill.length > 120 || values.experience.length > 120 || values.serviceArea.length > 160 || values.languages.length > 160 || values.availability.length > 120) throw new Error('Profile details are too long.')
 
   const record = {
     userId: session.user.id,

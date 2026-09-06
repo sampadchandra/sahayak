@@ -23,6 +23,10 @@ export async function createBooking(formData: FormData) {
   const scheduledForValue = String(formData.get('scheduledFor') ?? '').trim()
 
   if (!service || !location) throw new Error('Service and location are required')
+  if (service.length > 120 || location.length > 240 || notes.length > 2000) throw new Error('Booking details are too long')
+
+  const scheduledFor = scheduledForValue ? new Date(scheduledForValue) : null
+  if (scheduledForValue && (!scheduledFor || Number.isNaN(scheduledFor.getTime()))) throw new Error('Invalid scheduled date')
 
   await db.insert(booking).values({
     id: randomUUID(),
@@ -30,7 +34,7 @@ export async function createBooking(formData: FormData) {
     service,
     location,
     notes: notes || null,
-    scheduledFor: scheduledForValue ? new Date(scheduledForValue) : null,
+    scheduledFor,
     amount: null,
     status: 'REQUESTED',
   })
