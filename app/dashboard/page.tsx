@@ -3,6 +3,7 @@ import { AlertCircle, ArrowUpRight, CalendarDays, CheckCircle2, CircleHelp, Cloc
 import { auth } from '@/lib/auth'
 import { getMyBookings } from '@/app/actions/bookings'
 import { WorkerRatingForm } from '@/components/worker-rating-form'
+import { getMyAlerts } from '@/app/actions/alerts'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
@@ -17,7 +18,7 @@ const statusCopy: Record<string, { label: string; className: string }> = {
 export default async function DashboardPage() {
   const session = await auth.api.getSession({ headers: await headers() })
   if (!session?.user) redirect('/sign-in')
-  const bookings = await getMyBookings()
+  const [bookings, alerts] = await Promise.all([getMyBookings(), getMyAlerts()])
   const active = bookings.filter((item) => ['REQUESTED', 'CONFIRMED', 'IN_PROGRESS'].includes(item.status))
   const completed = bookings.filter((item) => item.status === 'COMPLETED')
   const firstName = session.user.name.split(' ')[0]
@@ -44,7 +45,7 @@ export default async function DashboardPage() {
         </section>
 
         <aside className="flex flex-col gap-4">
-          <div className="rounded-[1.5rem] border border-border bg-primary p-5 text-primary-foreground sm:p-6"><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[0.16em] opacity-75">Alerts</p><h2 className="mt-2 font-serif text-2xl font-bold">Stay in the loop.</h2></div><AlertCircle className="size-5" /></div><p className="mt-3 text-sm leading-6 opacity-85">Booking updates, worker messages, and safety reminders will appear here.</p><div className="mt-5 rounded-xl bg-primary-foreground/10 p-3 text-sm"><p className="font-semibold">{active.length ? `${active.length} active booking${active.length === 1 ? '' : 's'}` : 'You are all caught up'}</p><p className="mt-1 opacity-75">No unread alerts right now.</p></div></div>
+          <div className="rounded-[1.5rem] border border-border bg-primary p-5 text-primary-foreground sm:p-6"><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[0.16em] opacity-75">Alerts</p><h2 className="mt-2 font-serif text-2xl font-bold">Stay in the loop.</h2></div><AlertCircle className="size-5" /></div><p className="mt-3 text-sm leading-6 opacity-85">Booking updates, worker messages, and safety reminders will appear here.</p><div className="mt-5 rounded-xl bg-primary-foreground/10 p-3 text-sm"><p className="font-semibold">{alerts.length ? `${alerts.length} alert${alerts.length === 1 ? '' : 's'}` : 'You are all caught up'}</p>{alerts.slice(0, 3).map((item) => <div key={item.id} className="mt-3 border-t border-primary-foreground/15 pt-3"><p className="font-semibold">{item.title}</p><p className="mt-1 text-xs opacity-75">{item.body}</p></div>)}</div></div>
           <InfoCard icon={ShieldCheck} title="Safety centre" text="Every worker is verified. Keep conversations and payments inside Sahayak." />
           <InfoCard icon={CircleHelp} title="Need a hand?" text="Our support team is here if a booking does not go as planned." href="/help" />
         </aside>
