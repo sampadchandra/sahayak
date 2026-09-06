@@ -48,7 +48,7 @@ export default function Page() {
       <header className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-5 lg:px-8">
           <a href="#top" className="flex items-center gap-3" aria-label="SAHAYAK home">
-            <span className="flex items-center gap-2 rounded-[1.25rem] border border-primary/10 bg-card/80 px-2 py-1 shadow-sm"><span className="grid size-8 shrink-0 place-items-center overflow-hidden rounded-xl bg-background"><Image src="/sahayak-logo.png" alt="SAHAYAK emblem" width={54} height={54} className="h-[3.375rem] w-[3.375rem] max-w-none object-cover object-[50%_34%]" /></span><span className="font-serif text-lg font-bold tracking-tight text-foreground">SAHAYAK</span></span>
+            <span className="inline-flex h-12 w-44 items-center overflow-hidden rounded-[1.25rem] border border-primary/10 bg-card/80 px-2 py-1 shadow-sm"><Image src="/sahayak-logo.png" alt="SAHAYAK logo" width={540} height={420} className="h-full w-full object-contain" /></span>
           </a>
           <nav className="hidden items-center gap-8 text-sm font-medium lg:flex">
             {navItems.map((item) => <a key={item} href={`#${item.toLowerCase().replaceAll(' ', '-')}`} className="text-muted-foreground transition-colors hover:text-foreground">{t(item as 'Find help' | 'How it works' | 'For workers' | 'Our impact')}</a>)}
