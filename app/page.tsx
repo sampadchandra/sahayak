@@ -59,7 +59,7 @@ export default function Page() {
             <a href="/sign-up" className="hidden rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-transform hover:-translate-y-0.5 sm:block">Get started</a>
           </div>
         </div>
-        {menuOpen && <div className="border-t border-border bg-card px-5 py-4 lg:hidden"><div className="flex flex-col gap-4 text-sm font-medium">{navItems.map((item) => <a key={item} href={`#${item.toLowerCase().replaceAll(' ', '-')}`} onClick={() => setMenuOpen(false)}>{item}</a>)}<a href="/sign-up" className="w-fit rounded-full bg-primary px-4 py-2 text-primary-foreground">Get started</a></div></div>}
+        {menuOpen && <div className="border-t border-border bg-card px-5 py-4 lg:hidden"><div className="flex flex-col gap-4 text-sm font-medium">{navItems.map((item) => <a key={item} href={`#${item.toLowerCase().replaceAll(' ', '-')}`} onClick={() => setMenuOpen(false)}>{t(item as 'Find help' | 'How it works' | 'For workers' | 'Our impact')}</a>)}{session?.user ? <a href="/account" className="w-fit rounded-full border border-border px-4 py-2">{session.user.name}</a> : <a href="/sign-in" className="w-fit rounded-full border border-border px-4 py-2">Sign in</a>}<a href="/sign-up" className="w-fit rounded-full bg-primary px-4 py-2 text-primary-foreground">Get started</a></div></div>}
       </header>
 
       <section id="top" className="overflow-hidden border-b border-border/60">
