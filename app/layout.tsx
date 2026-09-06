@@ -25,7 +25,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className="bg-background">
       <body className={`${geist.variable} ${dmSerif.variable} antialiased`}>
-        <LanguageProvider><div className="fixed right-4 top-4 z-50"><LanguageSwitcher /></div>{children}</LanguageProvider>
+        <LanguageProvider><div className="fixed right-4 top-16 z-50 sm:top-4"><LanguageSwitcher /></div>{children}</LanguageProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
