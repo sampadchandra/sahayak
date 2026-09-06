@@ -1,4 +1,5 @@
-import { boolean, integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
+import { boolean, check, integer, index, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
+import { desc, sql } from 'drizzle-orm'
 
 export const user = pgTable('user', {
   id: text('id').primaryKey(),
@@ -56,6 +57,11 @@ export const booking = pgTable('booking', {
   location: text('location').notNull(),
   notes: text('notes'),
   amount: integer('amount'),
+  workerId: text('workerId'),
   createdAt: timestamp('createdAt').notNull().defaultNow(),
   updatedAt: timestamp('updatedAt').notNull().defaultNow(),
-})
+}, (table) => ({
+  userCreatedAtIdx: index('booking_user_created_at_idx').on(table.userId, desc(table.createdAt)),
+  workerStatusIdx: index('booking_worker_status_idx').on(table.workerId, table.status),
+  statusCheck: check('booking_status_valid', sql`${table.status} IN ('REQUESTED', 'CONFIRMED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED')`),
+}))

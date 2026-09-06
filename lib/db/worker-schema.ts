@@ -1,4 +1,5 @@
-import { text, timestamp, pgTable } from 'drizzle-orm/pg-core'
+import { check, index, pgTable, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core'
+import { sql } from 'drizzle-orm'
 
 export const workerProfile = pgTable('worker_profile', {
   id: text('id').primaryKey(),
@@ -17,4 +18,8 @@ export const workerProfile = pgTable('worker_profile', {
   profileStatus: text('profileStatus').notNull().default('PENDING_REVIEW'),
   createdAt: timestamp('createdAt').notNull().defaultNow(),
   updatedAt: timestamp('updatedAt').notNull().defaultNow(),
-})
+}, (table) => ({
+  userIdUnique: uniqueIndex('worker_profile_userId_key').on(table.userId),
+  statusSkillIdx: index('worker_profile_status_skill_idx').on(table.profileStatus, table.primarySkill),
+  statusCheck: check('worker_profile_status_valid', sql`${table.profileStatus} IN ('PENDING_REVIEW', 'APPROVED', 'SUSPENDED', 'REJECTED')`),
+}))
