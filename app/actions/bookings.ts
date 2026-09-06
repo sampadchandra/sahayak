@@ -4,10 +4,11 @@ import { randomUUID } from 'node:crypto'
 import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { eq, desc } from 'drizzle-orm'
+import { desc, eq } from 'drizzle-orm'
 import { auth } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { booking } from '@/lib/db/schema'
+import { alert } from '@/lib/db/alert-schema'
 
 async function requireUser() {
   const session = await auth.api.getSession({ headers: await headers() })
@@ -28,8 +29,9 @@ export async function createBooking(formData: FormData) {
   const scheduledFor = scheduledForValue ? new Date(scheduledForValue) : null
   if (scheduledForValue && (!scheduledFor || Number.isNaN(scheduledFor.getTime()))) throw new Error('Invalid scheduled date')
 
+  const bookingId = randomUUID()
   await db.insert(booking).values({
-    id: randomUUID(),
+    id: bookingId,
     userId: user.id,
     service,
     location,
@@ -37,6 +39,10 @@ export async function createBooking(formData: FormData) {
     scheduledFor,
     amount: null,
     status: 'REQUESTED',
+  })
+  await db.insert(alert).values({
+    id: randomUUID(), userId: user.id, bookingId, type: 'BOOKING_REQUESTED',
+    title: 'Booking request received', body: `Your ${service} request is now in the queue.`,
   })
 
   revalidatePath('/account')

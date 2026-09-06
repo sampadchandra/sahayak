@@ -1,4 +1,4 @@
-import { boolean, check, integer, index, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
+import { boolean, check, integer, index, pgTable, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core'
 import { desc, sql } from 'drizzle-orm'
 
 export const user = pgTable('user', {
@@ -47,6 +47,22 @@ export const verification = pgTable('verification', {
   createdAt: timestamp('createdAt').notNull().defaultNow(),
   updatedAt: timestamp('updatedAt').notNull().defaultNow(),
 })
+
+export const workerRating = pgTable('worker_rating', {
+  id: text('id').primaryKey(),
+  bookingId: text('booking_id').notNull(),
+  customerId: text('customer_id').notNull(),
+  workerId: text('worker_id').notNull(),
+  rating: integer('rating').notNull(),
+  review: text('review'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+}, (table) => ({
+  bookingUnique: uniqueIndex('worker_rating_booking_unique').on(table.bookingId),
+  customerIdx: index('worker_rating_customer_idx').on(table.customerId, desc(table.createdAt)),
+  workerIdx: index('worker_rating_worker_idx').on(table.workerId, desc(table.createdAt)),
+  valueCheck: check('worker_rating_value_valid', sql`${table.rating} BETWEEN 1 AND 5`),
+}))
 
 export const booking = pgTable('booking', {
   id: text('id').primaryKey(),
